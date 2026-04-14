@@ -1,14 +1,30 @@
 # Universal Lutron IoT Gateway (ESP32)
 
-Project untuk mengonlinekan alat ukur Lutron (YK-37UVSD, dsb) secara real-time.
+Project ini mengonversi alat ukur profesional Lutron seri SD Card (seperti YK-37UVSD) menjadi perangkat IoT yang dapat mengirim data real-time ke internet.
 
-## Features
-- **Universal Auto-Detect**: Mendeteksi jenis alat Lutron secara otomatis.
-- **WiFi Portal**: Setting WiFi dan Server via Browser (Captive Portal).
-- **Multi-Destination**: Kirim data ke Google Sheets, MQTT, atau REST API.
-- **Data Logging**: Format data kompatibel dengan format asli Lutron.
+## 🛠 Hardware Specifications
+- **Controller:** ESP32 (DevKit V1).
+- **Interface:** RS232 to TTL (MAX3232).
+- **Connector:** 3.5 mm Audio Jack.
+- **Protocol:** RS232, 9600 bps, 8-N-1.
 
-## Hardware Requirement
-- ESP32 (DevKit V1)
-- RS232 to TTL Module (MAX3232)
-- Audio Jack 3.5mm Male to Male / Custom
+## 📡 Features
+- **Auto-Model Detection**: Secara otomatis mengenali model Lutron berdasarkan unit data stream (D12/D11).
+- **Dual Display Support**: Membaca data utama (UV/Light) dan data tambahan (Type K/J Temp) secara bersamaan.
+- **WiFi Web Portal**: Konfigurasi SSID, Password, dan Endpoint Server tanpa flash ulang.
+- **Data Persistence**: Menggunakan LittleFS untuk menyimpan konfigurasi.
+
+## 🔍 Data Stream Structure (16 Digits)
+Berdasarkan manual YK-37UVSD:
+- `D15`: Start Word (`4`)
+- `D13`: Display Source (`1` = Main, `2` = Temp)
+- `D12-D11`: Unit ID (`A8` = mW/cm²)
+- `D9`: Decimal Point position
+- `D8-D1`: Measured Value
+- `D0`: End Word
+
+## 🚀 Setup
+1. Hubungkan Pin TX Lutron (Tip Jack 3.5mm) ke RX Modul MAX3232.
+2. Hubungkan Output TTL MAX3232 ke GPIO 16 (RX2) ESP32.
+3. Nyalakan ESP32, konek ke WiFi `Lutron-Gateway-AP`.
+4. Masukkan URL Server (Google Sheets/REST API) pada panel konfigurasi.
